@@ -6,3 +6,12 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
+# Local credentials
+.env
+credentials/
+*credentials*.json
+*service-account*.json
+
+# Rebuildable data-pipeline caches
+source_records.parquet
+source_cache.json
