@@ -1,3 +1,5 @@
+"確認有多少路線是一樣的"
+
 import argparse
 from pathlib import Path
 from collections import Counter, defaultdict

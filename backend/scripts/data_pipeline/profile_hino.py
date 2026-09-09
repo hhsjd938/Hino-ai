@@ -1,3 +1,8 @@
+"幫忙檢查統計excel檔案的欄位有什麼，包括(資料總列數、欄位數、車輛數量與行程數量、"
+"資料涵蓋的時間、不同車系與車輛狀態、GPS、里程、燃油、速度、轉速等欄位的缺值與零值、各類事件的數量、"
+"資料回報間隔、重複時間紀錄、里程或燃油倒退的行程、GPS速度與CAN速度不一致的情況、距離至少10公里且有耗油的候選行程)"
+
+
 import argparse
 from pathlib import Path
 from collections import Counter, defaultdict
