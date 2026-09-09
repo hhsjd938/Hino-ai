@@ -1,0 +1,17 @@
+{
+  "dataset": "HINO processed collaboration package",
+  "generated_date": "2026-09-09",
+  "source": {
+    "name": "output data_Hotai_20260511.xlsx",
+    "size_bytes": 115582132,
+    "sha256": "A58E9F0A372D8F0372B3B2E8D634AB411E0F28C527251679A0770B1271D6794B"
+  },
+  "records": 493744,
+  "vehicles": 20,
+  "trips": 3541,
+  "screened_trips": 856,
+  "similar_endpoint_pairs": 1665,
+  "route_pairs_at_90_percent_coverage": 1216,
+  "source_workbook_included": false,
+  "rebuildable_cache_included": false
+}

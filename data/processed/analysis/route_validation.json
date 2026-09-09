@@ -1,0 +1,24 @@
+{
+  "method": "Same-vehicle endpoint/mileage/fuel screening followed by bidirectional geographic overlap. GPS points reduced to occupied 250m approximate planar grid cells; fraction of occupied cells within 500m of the other trip. Retrieval heuristic, not road-level route identity or proof of comparable load/traffic.",
+  "coverage_threshold_results": {
+    "0.8": {
+      "pairs": 1249,
+      "vehicles": 11,
+      "distinct_trips": 168,
+      "later_trips_with_prior": 132
+    },
+    "0.9": {
+      "pairs": 1216,
+      "vehicles": 11,
+      "distinct_trips": 158,
+      "later_trips_with_prior": 125
+    },
+    "0.95": {
+      "pairs": 1115,
+      "vehicles": 9,
+      "distinct_trips": 138,
+      "later_trips_with_prior": 111
+    }
+  },
+  "main_threshold": 0.9
+}

@@ -1,0 +1,325 @@
+{
+  "source": {
+    "name": "output data_Hotai_20260511.xlsx",
+    "size": 115582132,
+    "mtime_ns": 1778633397566036900
+  },
+  "rows": 493744,
+  "vehicles": 20,
+  "trips": 3541,
+  "observation_dates": 31,
+  "trip_start_dates": 30,
+  "candidate": {
+    "trips": 914,
+    "vehicles": 20,
+    "by_type": {
+      "300": 482,
+      "500": 238,
+      "700": 194
+    },
+    "l_per_100km": {
+      "0": 8.0,
+      "0.25": 13.888888888888989,
+      "0.5": 17.857142857142858,
+      "0.75": 25.491068062728324,
+      "0.95": 50.0,
+      "1": 185.5263157894737
+    }
+  },
+  "screened": {
+    "trips": 856,
+    "vehicles": 20,
+    "by_type": {
+      "300": 470,
+      "500": 222,
+      "700": 164
+    },
+    "l_per_100km": {
+      "0": 8.0,
+      "0.25": 13.848926235302226,
+      "0.5": 17.47141747141569,
+      "0.75": 24.193548387096776,
+      "0.95": 45.83333333333333,
+      "1": 111.11111111111111
+    }
+  },
+  "screen_rules": [
+    "distance >= 10 km",
+    "fuel delta > 0; fuel and mileage never decrease within trip",
+    "all CAN status == 0",
+    "no duplicate timestamps; no gap above 120 seconds",
+    "engineOn within 120 seconds of first record; parked within 120 seconds of last record"
+  ],
+  "screened_fuel_thresholds": {
+    "1": {
+      "trips": 856,
+      "vehicles": 20,
+      "by_type": {
+        "300": 470,
+        "500": 222,
+        "700": 164
+      },
+      "l_per_100km": {
+        "0": 8.0,
+        "0.25": 13.848926235302226,
+        "0.5": 17.47141747141569,
+        "0.75": 24.193548387096776,
+        "0.95": 45.83333333333333,
+        "1": 111.11111111111111
+      }
+    },
+    "2": {
+      "trips": 793,
+      "vehicles": 20,
+      "by_type": {
+        "300": 407,
+        "500": 222,
+        "700": 164
+      },
+      "l_per_100km": {
+        "0": 9.17431192660581,
+        "0.25": 14.12429378531088,
+        "0.5": 18.181818181818183,
+        "0.75": 25.34562211981588,
+        "0.95": 47.28070175438596,
+        "1": 111.11111111111111
+      }
+    },
+    "5": {
+      "trips": 464,
+      "vehicles": 17,
+      "by_type": {
+        "300": 125,
+        "500": 184,
+        "700": 155
+      },
+      "l_per_100km": {
+        "0": 10.2803738317757,
+        "0.25": 17.45180645984944,
+        "0.5": 21.666666666666668,
+        "0.75": 30.234279609279607,
+        "0.95": 55.223684210526315,
+        "1": 111.11111111111111
+      }
+    },
+    "10": {
+      "trips": 207,
+      "vehicles": 12,
+      "by_type": {
+        "300": 21,
+        "500": 56,
+        "700": 130
+      },
+      "l_per_100km": {
+        "0": 11.926605504587156,
+        "0.25": 22.74184149184149,
+        "0.5": 28.15126050420168,
+        "0.75": 40.14775668679897,
+        "0.95": 59.25287356321838,
+        "1": 111.11111111111111
+      }
+    }
+  },
+  "positive_fuel_step_top": [
+    [
+      0.5,
+      25561
+    ],
+    [
+      1.0,
+      959
+    ],
+    [
+      1.5,
+      76
+    ],
+    [
+      2.0,
+      3
+    ],
+    [
+      5.0,
+      1
+    ]
+  ],
+  "positive_fuel_steps": 26600,
+  "screened_mileage_speed_agreement_20pct_or_2km": 0,
+  "similar_endpoint_pairs": 1665,
+  "pairs_both_fuel_ge5l": 1364,
+  "pairs_ge5l_vehicles": 13,
+  "pairs_ge5l_distinct_trips": 224,
+  "pairs_ge5l_later_trips_with_prior": 168,
+  "pair_definition": "same vehicle; earlier trip ends before later trip; later/earlier mileage in [0.8,1.2]; origins and destinations each within 1 km. Does NOT establish same route, load, traffic or causal comparison.",
+  "idle_events": 1620,
+  "idle_duration_matches_within2s": 1603,
+  "idle_start_location_candidates": 1595,
+  "repeated_idle_clusters": 89,
+  "repeated_idle_cluster_events": 1138,
+  "idle_cluster_method": "300m connected components, >=3 events and >=2 observation dates; approximate locations, not verified unloading sites; chain-connected clusters may span more than 300m.",
+  "trips_two_or_more_safety_event_types": 1772,
+  "trips_three_or_more_safety_event_types": 1007,
+  "safety_event_types_by_vehicle": {
+    "48XAG6CMA0": [
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "584LGFL6EX": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "60LBK6GREF": [
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "AHMPUL0C13": [
+      "12",
+      "14",
+      "16",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "ASQBKM1VW6": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "B4TLK0X42N": [
+      "12",
+      "14",
+      "16",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "BYC608ZI24": [
+      "12",
+      "14",
+      "16",
+      "6",
+      "8"
+    ],
+    "C1N6TWBTVB": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "C38ZBDJPHK": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "DLM28P1JMF": [
+      "12",
+      "14",
+      "16",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "FOH9N06KXC": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "HTLT0PUOFI": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "M78YOZ58I2": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "SGQ5MOWUGY": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "SROHH1P6DO": [
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "TPMUFOCRKB": [
+      "19",
+      "6",
+      "7",
+      "8"
+    ],
+    "V9R0Z0ZLT0": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "XYK9DYX172": [
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "YP6LR2GGM2": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ],
+    "ZNUKGJO57M": [
+      "12",
+      "14",
+      "16",
+      "19",
+      "20",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  "events_missing_start": 0,
+  "runtime_s": 193.1901729106903
+}
