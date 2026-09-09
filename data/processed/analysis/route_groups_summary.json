@@ -1,0 +1,21 @@
+{
+  "definition": "Same vehicle; pair passed endpoint, distance, and fuel screening; bidirectional route coverage minimum meets the threshold.",
+  "coverage_threshold": 0.9,
+  "validated_direct_pairs": 1189,
+  "repeated_route_groups": 32,
+  "grouped_distinct_trips": 157,
+  "vehicles_with_repeated_routes": 11,
+  "complete_pair_groups": 28,
+  "largest_group_trip_count": 36,
+  "trip_count_by_group_size": {
+    "2": 21,
+    "3": 4,
+    "4": 2,
+    "7": 1,
+    "8": 1,
+    "17": 1,
+    "27": 1,
+    "36": 1
+  },
+  "method_limit": "Connected components are used. A chain of overlapping pairs can place two trips in one group even when those two trips were not directly validated against each other; direct_pair_density shows how complete each group is."
+}

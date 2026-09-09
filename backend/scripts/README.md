@@ -11,6 +11,7 @@ One data owner runs the pipeline against the local XLSX workbook. Generated, rev
 - `profile_hino.py`: scans the local workbook and writes a JSON data profile.
 - `verify_topics.py`: creates the Parquet cache, trip metrics, deduplicated events, route candidates, idle-location candidates, and topic-validation summary.
 - `verify_route_pairs.py`: calculates bidirectional GPS coverage for candidate route pairs.
+- `summarize_route_groups.py`: groups trips connected by validated route overlap and writes repeated-route summaries.
 
 ```powershell
 python backend/scripts/data_pipeline/profile_hino.py `
@@ -23,6 +24,11 @@ python backend/scripts/data_pipeline/verify_topics.py `
 
 python backend/scripts/data_pipeline/verify_route_pairs.py `
   --analysis-dir "data\processed\analysis"
+
+python backend/scripts/data_pipeline/summarize_route_groups.py `
+  --pairs "data\processed\analysis\route_screened_pairs.csv" `
+  --output-dir "data\processed\analysis" `
+  --threshold 0.9
 ```
 
 ## `route_poc`

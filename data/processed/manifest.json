@@ -9,9 +9,11 @@
   "records": 493744,
   "vehicles": 20,
   "trips": 3541,
-  "screened_trips": 856,
-  "similar_endpoint_pairs": 1665,
-  "route_pairs_at_90_percent_coverage": 1216,
+  "screened_trips": 851,
+  "similar_endpoint_pairs": 1621,
+  "route_pairs_at_90_percent_coverage": 1189,
+  "repeated_route_groups": 32,
+  "trips_in_repeated_route_groups": 157,
   "source_workbook_included": false,
   "rebuildable_cache_included": false
 }

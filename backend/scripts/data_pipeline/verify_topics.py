@@ -60,7 +60,7 @@ events.to_csv(OUT/'events_deduplicated.csv',index=False,encoding='utf-8-sig')
 event_groups={(a,b):g for (a,b),g in events.groupby(['enabledCode','journeyCode'])}
 steps=Counter(); records=[]
 for (vehicle,journey),g in df.groupby(['enabledCode','journeyCode'],sort=False):
-    times=g['time']; ts=times.astype('int64').to_numpy()/1e9; dt=np.diff(ts)
+    times=g['time']; ts=times.to_numpy(dtype='datetime64[ns]').astype('int64')/1e9; dt=np.diff(ts)
     mile=g['can.totalMileage'].to_numpy(); fuel=g['can.engine.totalFuelUsed'].to_numpy()
     dm=np.diff(mile); fuel_diff=np.diff(fuel)
     steps.update(np.round(fuel_diff[fuel_diff>0],6).tolist())
