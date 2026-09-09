@@ -12,12 +12,16 @@ import json
 import math
 import re
 import statistics
+import sys
 import time
 import zipfile
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from xml.etree import ElementTree as ET
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from google_drive_source import DriveWorkbook, add_drive_argument
 
 
 NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
@@ -41,7 +45,7 @@ KEEP_COLUMNS = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", type=Path, required=True)
+    add_drive_argument(parser)
     parser.add_argument("--vehicle", required=True)
     parser.add_argument("--journey", required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -124,12 +128,15 @@ def summarize_trip(rows: list[dict]) -> dict | None:
 def main() -> None:
     args = parse_args()
     started = time.time()
+    drive = DriveWorkbook(args.drive_file)
+    source_identity = drive.identity()
+    source = drive.download()
     per_journey: dict[str, list[dict]] = defaultdict(list)
     target_points: list[dict] = []
     target_type = None
     scanned = 0
 
-    with zipfile.ZipFile(args.source) as book:
+    with zipfile.ZipFile(source) as book:
         strings = shared_strings(book)
         with book.open("xl/worksheets/sheet1.xml") as sheet:
             for event, row in ET.iterparse(sheet, events=("end",)):
@@ -198,7 +205,7 @@ def main() -> None:
     rates = [row["l_per_100km"] for row in historical if row["l_per_100km"] is not None]
     target_points.sort(key=lambda row: row["time"])
     result = {
-        "source": str(args.source),
+        "source": source_identity,
         "vehicle": args.vehicle,
         "journey": args.journey,
         "vehicle_type": int(float(target_type)) if target_type not in (None, "") else None,

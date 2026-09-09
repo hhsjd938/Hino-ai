@@ -6,17 +6,22 @@
 import argparse
 from pathlib import Path
 from collections import Counter, defaultdict
-import json, time, math
+import json, time, math, sys
 import openpyxl
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from google_drive_source import DriveWorkbook, add_drive_argument
+
 parser=argparse.ArgumentParser(description='Profile the HINO source workbook without modifying it.')
-parser.add_argument('--source',type=Path,required=True,help='Path to the source XLSX workbook')
+add_drive_argument(parser)
 parser.add_argument('--output',type=Path,required=True,help='Path for the generated profile JSON')
 args=parser.parse_args()
 
 start=time.time()
-source=args.source.resolve()
+drive=DriveWorkbook(args.drive_file)
+source_identity=drive.identity()
+source=drive.download()
 wb=openpyxl.load_workbook(source, read_only=True, data_only=True)
 ws=wb.worksheets[0]
 rows=ws.iter_rows(values_only=True)
@@ -83,6 +88,6 @@ def summary(xs):
     return dict(zip(['min','p25','median','p75','p95','max'],[float(x) for x in np.percentile(xs,[0,25,50,75,95,100])])) if xs else {}
 event_counts=Counter(k[1] for k in events)
 idle=[v['duration'] for k,v in events.items() if k[1]=='2' and v['duration'] is not None]
-result={'file':source.name,'rows':count,'columns':len(header),'vehicles':len(vehicles),'trips':len(trips),'time_range':[time_min,time_max],'types_rows':types,'car_status_rows':status,'missing_numeric':missing,'zero_numeric':zeros,'events_raw':event_rows,'events_unique_vehicle_type_start':event_counts,'events_vehicles':{k:len(v) for k,v in event_vehicle.items()},'events_trips':{k:len(v) for k,v in event_trip.items()},'sampling_seconds':summary(intervals),'intervals_over_120s':sum(x>120 for x in intervals),'duplicate_trip_timestamps':duplicates,'rows_per_trip':summary(records_per_trip),'trips_per_vehicle':summary(list(vehicle_trip_counts.values())),'trip_days':trip_days,'trip_minutes':summary(durations),'trip_distance_km':summary(trip_dist),'trip_fuel_liters':summary(trip_fuel),'trips_with_fuel_decrease':negative_fuel_trips,'trips_with_mileage_decrease':negative_mileage_trips,'positive_distance_zero_fuel_trips':zero_fuel_positive_dist,'candidate_fuel_trips_distance_at_least_10km':valid_trip,'candidate_fuel_l_per_100km':summary(rates),'fuel_step_counts':fuel_steps,'gps_zero_can_over_5_rows':mismatch,'coordinate_steps':coordinate_steps,'idle_event_reported_duration_seconds':summary(idle),'idle_events_with_reported_duration':len(idle),'elapsed_seconds':time.time()-start}
+result={'source':source_identity,'rows':count,'columns':len(header),'vehicles':len(vehicles),'trips':len(trips),'time_range':[time_min,time_max],'types_rows':types,'car_status_rows':status,'missing_numeric':missing,'zero_numeric':zeros,'events_raw':event_rows,'events_unique_vehicle_type_start':event_counts,'events_vehicles':{k:len(v) for k,v in event_vehicle.items()},'events_trips':{k:len(v) for k,v in event_trip.items()},'sampling_seconds':summary(intervals),'intervals_over_120s':sum(x>120 for x in intervals),'duplicate_trip_timestamps':duplicates,'rows_per_trip':summary(records_per_trip),'trips_per_vehicle':summary(list(vehicle_trip_counts.values())),'trip_days':trip_days,'trip_minutes':summary(durations),'trip_distance_km':summary(trip_dist),'trip_fuel_liters':summary(trip_fuel),'trips_with_fuel_decrease':negative_fuel_trips,'trips_with_mileage_decrease':negative_mileage_trips,'positive_distance_zero_fuel_trips':zero_fuel_positive_dist,'candidate_fuel_trips_distance_at_least_10km':valid_trip,'candidate_fuel_l_per_100km':summary(rates),'fuel_step_counts':fuel_steps,'gps_zero_can_over_5_rows':mismatch,'coordinate_steps':coordinate_steps,'idle_event_reported_duration_seconds':summary(idle),'idle_events_with_reported_duration':len(idle),'elapsed_seconds':time.time()-start}
 out=args.output.resolve(); out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(result,ensure_ascii=False,indent=2),flush=True)

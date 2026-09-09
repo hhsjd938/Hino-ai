@@ -1,6 +1,14 @@
 # HINO Python scripts
 
-The scripts are grouped by responsibility. Source workbooks are inputs and are never modified.
+The scripts are grouped by responsibility. They read the latest workbook revision directly from Google Drive and never modify the source.
+
+## Google Drive source
+
+The default Drive file is `output data_Hotai_20260511.xlsx` (`1F68Xl4TACl7iGvES-0g0HeqDGxoBT639`). Override it with `--drive-file` or the `HINO_DRIVE_FILE` environment variable. The value can be a file ID or sharing URL.
+
+Authentication uses Google Application Default Credentials with read-only Drive access. In production, attach a service account and share the Drive file with that account. For local development, configure ADC for the Google account that can read the file. Do not commit credential JSON files.
+
+At startup, each script reads Drive metadata. `verify_topics.py` compares the Drive revision with `source_cache.json`; it downloads and rebuilds the Parquet cache only when the source changed. Downloads are temporary and removed when the process exits.
 
 ## `data_pipeline`
 
@@ -8,15 +16,11 @@ The scripts are grouped by responsibility. Source workbooks are inputs and are n
 - `verify_topics.py`: creates the Parquet cache, trip metrics, deduplicated events, route candidates, idle-location candidates, and topic-validation summary.
 - `verify_route_pairs.py`: calculates bidirectional GPS coverage for candidate route pairs.
 
-All source and output paths are explicit command-line arguments so the scripts work independently of the repository location.
-
 ```powershell
 python backend/scripts/data_pipeline/profile_hino.py `
-  --source "C:\path\to\output data_Hotai_20260511.xlsx" `
   --output "data\processed\hino_profile.json"
 
 python backend/scripts/data_pipeline/verify_topics.py `
-  --source "C:\path\to\output data_Hotai_20260511.xlsx" `
   --output-dir "data\processed\analysis"
 
 python backend/scripts/data_pipeline/verify_route_pairs.py `
@@ -32,7 +36,6 @@ python backend/scripts/data_pipeline/verify_route_pairs.py `
 
 ```powershell
 python backend/scripts/route_poc/extract_trip.py `
-  --source "C:\path\to\output data_Hotai_20260511.xlsx" `
   --vehicle "AHMPUL0C13" `
   --journey "251121060007" `
   --output "data\processed\route_poc\trip.json"

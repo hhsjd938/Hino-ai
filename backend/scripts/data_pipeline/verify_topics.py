@@ -4,26 +4,30 @@ import argparse
 from pathlib import Path
 from collections import Counter, defaultdict
 from datetime import datetime
-import json, math, time
+import json, math, time, sys
 import numpy as np
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import openpyxl
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from google_drive_source import DriveWorkbook, add_drive_argument
+
 parser=argparse.ArgumentParser(description='Build HINO trip, event, route-candidate, and topic-validation datasets.')
-parser.add_argument('--source',type=Path,required=True,help='Path to the source XLSX workbook')
+add_drive_argument(parser)
 parser.add_argument('--output-dir',type=Path,required=True,help='Directory for generated analysis files')
 args=parser.parse_args()
 
 OUT=args.output_dir.resolve()
 OUT.mkdir(parents=True,exist_ok=True)
-src=args.source.resolve()
+drive=DriveWorkbook(args.drive_file)
 cache=OUT/'source_records.parquet'
 meta=OUT/'source_cache.json'
-identity={'name':src.name,'size':src.stat().st_size,'mtime_ns':src.stat().st_mtime_ns}
+identity=drive.identity()
 started=time.time()
 if not cache.exists() or not meta.exists() or json.loads(meta.read_text('utf-8'))!=identity:
+    src=drive.download()
     wb=openpyxl.load_workbook(src,read_only=True,data_only=True)
     it=wb.worksheets[0].iter_rows(values_only=True)
     names=list(next(it)); schema=pa.schema([(n,pa.string()) for n in names])
