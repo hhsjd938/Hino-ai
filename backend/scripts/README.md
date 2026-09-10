@@ -12,6 +12,7 @@ One data owner runs the pipeline against the local XLSX workbook. Generated, rev
 - `verify_topics.py`: creates the Parquet cache, trip metrics, deduplicated events, route candidates, idle-location candidates, and topic-validation summary.
 - `verify_route_pairs.py`: calculates bidirectional GPS coverage for candidate route pairs.
 - `summarize_route_groups.py`: groups trips connected by validated route overlap and writes repeated-route summaries.
+- `build_route_stop_map.py`: streams GPS points for the repeated-route trips and creates an interactive route-and-stop map. A suspected intermediate stop means CAN speed stayed at or below 3 km/h for at least 3 minutes and the location is more than 300 metres from both trip endpoints; it does not prove a customer visit.
 
 ```powershell
 python backend/scripts/data_pipeline/profile_hino.py `
@@ -29,6 +30,11 @@ python backend/scripts/data_pipeline/summarize_route_groups.py `
   --pairs "data\processed\analysis\route_screened_pairs.csv" `
   --output-dir "data\processed\analysis" `
   --threshold 0.9
+
+python backend/scripts/data_pipeline/build_route_stop_map.py `
+  --source "F:\path\to\output data_Hotai_20260511.xlsx" `
+  --members "data\processed\analysis\route_group_members.csv" `
+  --output "data\processed\analysis\route_stop_map.html"
 ```
 
 ## `route_poc`
