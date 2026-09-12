@@ -1,0 +1,84 @@
+{
+  "generated_at": "2026-09-12T22:47:35+08:00",
+  "source": {
+    "name": "output data_Hotai_20260511.xlsx",
+    "size_bytes": 115582132,
+    "sha256": "a58e9f0a372d8f0372b3b2e8d634ab411e0f28c527251679a0770b1271d6794b"
+  },
+  "route_members_source": "route_group_members.csv",
+  "route_groups_source": "route_groups.csv",
+  "thresholds": {
+    "high_rpm": 2000.0,
+    "low_speed": 20.0,
+    "stop_speed": 3.0,
+    "go_speed": 10.0,
+    "max_gap_seconds": 120.0
+  },
+  "definitions": {
+    "interval_weighting": "Left observation carried forward; only intervals with 0 < dt <= max_gap_seconds are used.",
+    "rapid_accel_count": "Unique event type 6 by vehicle and startTime.",
+    "rapid_decel_count": "Unique event type 7 by vehicle and startTime.",
+    "stop_go_count": "Complete speed cycle >= go_speed, then <= stop_speed, then >= go_speed; gaps reset the cycle.",
+    "deviations": "Percentage difference from the median of the same vehicle-specific route group."
+  },
+  "counts": {
+    "source_rows_scanned": 493744,
+    "selected_rows": 48002,
+    "selected_rows_invalid_time": 0,
+    "rapid_event_reports_missing_start": 0,
+    "vehicles": 11,
+    "route_groups": 32,
+    "trips": 157,
+    "complete_pair_groups": 28,
+    "chain_connected_groups": 4
+  },
+  "reconciliation": {
+    "distance_mismatch_count": 0,
+    "fuel_mismatch_count": 0,
+    "l_per_100km_mismatch_count": 0,
+    "max_distance_abs_delta": 1.4210854715202004e-14,
+    "max_fuel_abs_delta": 0.0,
+    "max_l_per_100km_abs_delta": 7.105427357601002e-15
+  },
+  "excluded_intervals": {
+    "nonpositive_seconds": 0,
+    "above_max_gap_seconds": 0
+  },
+  "signal_coverage": {
+    "idle_coverage_ratio": {
+      "minimum": 1.0,
+      "median": 1.0,
+      "maximum": 1.0
+    },
+    "rpm_coverage_ratio": {
+      "minimum": 1.0,
+      "median": 1.0,
+      "maximum": 1.0
+    },
+    "speed_coverage_ratio": {
+      "minimum": 1.0,
+      "median": 1.0,
+      "maximum": 1.0
+    },
+    "rpm_speed_joint_coverage_ratio": {
+      "minimum": 1.0,
+      "median": 1.0,
+      "maximum": 1.0
+    }
+  },
+  "missing_signal_counts": {
+    "distance_km": 0,
+    "duration_min": 0,
+    "fuel_l": 0,
+    "l_per_100km": 0,
+    "idle_ratio": 0,
+    "high_rpm_ratio": 0,
+    "speed_std": 0
+  },
+  "outputs": [
+    "trip_behavior_metrics.csv",
+    "trip_behavior_report.html",
+    "trip_behavior_summary.json"
+  ],
+  "limitation": "Comparisons are observational associations and do not isolate load, traffic, weather, driver, or causal effects."
+}
