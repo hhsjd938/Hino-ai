@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract one vehicle and journey from the source XLSX without changing it.
+"""從大型 Excel 中擷取一輛車的指定行程，供路線 POC 使用Extract one vehicle and journey from the source XLSX without changing it.
 
 The workbook contains a very large worksheet. This reader streams the worksheet
 XML and keeps only the columns needed by the route-planning proof of concept.
@@ -41,7 +41,7 @@ KEEP_COLUMNS = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", type=Path, required=True, help="Path to the local source XLSX workbook")
+    parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--vehicle", required=True)
     parser.add_argument("--journey", required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -124,13 +124,12 @@ def summarize_trip(rows: list[dict]) -> dict | None:
 def main() -> None:
     args = parse_args()
     started = time.time()
-    source = args.source.resolve()
     per_journey: dict[str, list[dict]] = defaultdict(list)
     target_points: list[dict] = []
     target_type = None
     scanned = 0
 
-    with zipfile.ZipFile(source) as book:
+    with zipfile.ZipFile(args.source) as book:
         strings = shared_strings(book)
         with book.open("xl/worksheets/sheet1.xml") as sheet:
             for event, row in ET.iterparse(sheet, events=("end",)):
@@ -199,7 +198,7 @@ def main() -> None:
     rates = [row["l_per_100km"] for row in historical if row["l_per_100km"] is not None]
     target_points.sort(key=lambda row: row["time"])
     result = {
-        "source": str(source),
+        "source": str(args.source),
         "vehicle": args.vehicle,
         "journey": args.journey,
         "vehicle_type": int(float(target_type)) if target_type not in (None, "") else None,
