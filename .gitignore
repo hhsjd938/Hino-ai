@@ -15,3 +15,6 @@ credentials/
 # Rebuildable data-pipeline caches
 source_records.parquet
 source_cache.json
+
+.venv/
+hino/
