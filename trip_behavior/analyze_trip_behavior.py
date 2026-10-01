@@ -41,6 +41,7 @@ CORE_COLUMNS = [
 ]
 
 QUALITY_COLUMNS = [
+    "start_time",
     "group_trip_count",
     "direct_pair_density",
     "group_quality",
@@ -487,6 +488,7 @@ header h1{{margin:0 0 6px;font-size:28px}} header p{{margin:0;color:#d9eee7}}
 main{{max-width:1320px;margin:0 auto;padding:24px}} .toolbar,.panel{{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 18px #16372e0c}}
 .toolbar{{padding:16px;display:flex;gap:16px;align-items:end;flex-wrap:wrap}} label{{display:grid;gap:5px;color:var(--muted);font-weight:650}}
 select{{min-width:220px;border:1px solid #b9c9c2;border-radius:8px;padding:9px;background:white;color:var(--ink)}}
+details.trip-picker{{position:relative;min-width:320px;color:var(--ink)}} details.trip-picker summary{{list-style:none;cursor:pointer;min-width:320px;border:1px solid #b9c9c2;border-radius:8px;padding:9px;background:white;color:var(--ink);position:relative}} details.trip-picker summary::-webkit-details-marker{{display:none}} details.trip-picker summary::after{{content:'▼';position:absolute;right:10px;color:var(--muted);font-size:10px}} details.trip-picker[open] summary::after{{content:'▲'}} .trip-options{{position:absolute;z-index:10;top:100%;left:0;right:0;max-height:360px;overflow:auto;margin-top:4px;padding:6px;background:white;border:1px solid #b9c9c2;border-radius:8px;box-shadow:0 5px 18px #16372e22}} .trip-options label{{display:flex;grid-template-columns:none;gap:8px;align-items:flex-start;padding:7px 6px;color:var(--ink);font-weight:500;cursor:pointer}} .trip-options label:hover{{background:#f0f7f4}} .trip-options input{{margin-top:3px;flex:0 0 auto}}
 .quality{{margin-left:auto;padding:7px 10px;border-radius:999px;font-weight:700}} .complete_pair{{background:#daf3e8;color:#0c6a4a}} .chain_connected{{background:#fff0ca;color:#815000}}
 .cards{{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:12px;margin:16px 0}} .card{{background:white;border:1px solid var(--line);border-radius:12px;padding:14px}}
 .card .label{{color:var(--muted);font-size:12px}} .card .value{{font-size:24px;font-weight:750;margin-top:3px}}
@@ -502,28 +504,34 @@ th{{position:sticky;top:0;background:#eef5f2;color:#385b50;font-size:12px}} th:f
   <section class="toolbar">
     <label>車輛<select id="vehicle"></select></label>
     <label>路徑群組<select id="group"></select></label>
+    <label>行程<details id="tripPicker" class="trip-picker"><summary id="tripSummary">行程</summary><div id="tripOptions" class="trip-options"></div></details></label>
     <span id="quality" class="quality"></span>
   </section>
   <section id="cards" class="cards"></section>
   <section class="panel"><table><thead><tr>
-    <th>Trip</th><th>時間 min</th><th>油耗 L</th><th>L/100km</th><th>油耗偏差</th><th>時間偏差</th><th>怠速 min</th><th>怠速率</th><th>高 RPM min</th><th>高 RPM率</th><th>高RPM低速 min</th><th>急加速</th><th>急減速</th><th>Stop-go</th><th>速度σ</th>
+    <th>時間</th><th>時間 min</th><th>油耗 L</th><th>L/100km</th><th>油耗偏差</th><th>時間偏差</th><th>怠速 min</th><th>怠速率</th><th>高 RPM min</th><th>高 RPM率</th><th>高RPM低速 min</th><th>急加速</th><th>急減速</th><th>Stop-go</th><th>速度σ</th>
   </tr></thead><tbody id="rows"></tbody></table></section>
-  <p class="note">門檻：高 RPM ≥ {thresholds.high_rpm:g}、低速 ≤ {thresholds.low_speed:g} km/h、stop-go 為 ≥ {thresholds.go_speed:g} → ≤ {thresholds.stop_speed:g} → ≥ {thresholds.go_speed:g} km/h。正偏差表示高於同群組中位數。非完全配對群組可能包含僅透過其他行程間接連接的趟次。</p>
+  <p class="note">門檻：高 RPM ≥ {thresholds.high_rpm:g}、低速 ≤ {thresholds.low_speed:g} km/h、stop-go 為 ≥ {thresholds.go_speed:g} → ≤ {thresholds.stop_speed:g} → ≥ {thresholds.go_speed:g} km/h。正偏差表示高於同群組中位數。非完全配對群組可能包含僅透過其他行程間接連接的趟次。行程可篩選顯示，但油耗／時間偏差基準仍為完整群組。</p>
   <p class="note">本報告呈現關聯比較，不代表怠速、RPM 或 stop-go 單獨造成油耗差異。產生時間：{generated}</p>
 </main>
 <script>
 const DATA={payload}; const CONFIG={config};
-const vehicle=document.querySelector('#vehicle'),group=document.querySelector('#group'),tbody=document.querySelector('#rows'),cards=document.querySelector('#cards'),quality=document.querySelector('#quality');
+const vehicle=document.querySelector('#vehicle'),group=document.querySelector('#group'),tripPicker=document.querySelector('#tripPicker'),tripSummary=document.querySelector('#tripSummary'),tripOptions=document.querySelector('#tripOptions'),tbody=document.querySelector('#rows'),cards=document.querySelector('#cards'),quality=document.querySelector('#quality');
+const selectedTrips=new Set();
 const uniq=a=>[...new Set(a)].sort(); const fmt=(v,n=1)=>v==null?'—':Number(v).toFixed(n); const pct=v=>v==null?'—':`${{(v*100).toFixed(1)}}%`;
 function deviation(v){{if(v==null)return '—';const cls=v>0?'bad':v<0?'good':'';return `<span class="${{cls}}">${{v>0?'+':''}}${{fmt(v)}}%</span>`}}
 function options(el,items){{el.innerHTML=items.map(x=>`<option value="${{x}}">${{x}}</option>`).join('')}}
-function updateGroups(){{const groups=uniq(DATA.filter(x=>x.vehicle_id===vehicle.value).map(x=>x.route_group_id));options(group,groups);render()}}
-function render(){{const rows=DATA.filter(x=>x.route_group_id===group.value).sort((a,b)=>a.fuel_deviation_pct-b.fuel_deviation_pct);if(!rows.length)return;const r=rows[0];quality.className=`quality ${{r.group_quality}}`;quality.textContent=r.group_quality==='complete_pair'?'完整配對群組':'鏈式連接群組';
+function currentGroupRows(){{return DATA.filter(x=>x.vehicle_id===vehicle.value&&x.route_group_id===group.value)}}
+function syncTripChecks(){{const current=currentGroupRows();const all=tripOptions.querySelector('input[data-all]');if(all)all.checked=current.length>0&&selectedTrips.size===current.length;tripOptions.querySelectorAll('input[data-trip]').forEach(input=>{{input.checked=selectedTrips.has(input.value)}});tripSummary.textContent=`行程（${{selectedTrips.size}}/${{current.length}} 已選）`}}
+function renderTripOptions(){{const current=currentGroupRows();selectedTrips.clear();current.forEach(x=>selectedTrips.add(x.trip_id));tripOptions.innerHTML='';const allLabel=document.createElement('label');const allInput=document.createElement('input');allInput.type='checkbox';allInput.dataset.all='true';allLabel.append(allInput,document.createTextNode('全部行程'));tripOptions.append(allLabel);allInput.addEventListener('change',()=>{{if(allInput.checked)current.forEach(x=>selectedTrips.add(x.trip_id));else selectedTrips.clear();syncTripChecks();render()}});current.forEach(x=>{{const label=document.createElement('label');const input=document.createElement('input');input.type='checkbox';input.value=x.trip_id;input.dataset.trip='true';label.append(input,document.createTextNode((x.start_time||'').replace('T',' ')));tripOptions.append(label);input.addEventListener('change',()=>{{if(input.checked)selectedTrips.add(input.value);else selectedTrips.delete(input.value);syncTripChecks();render()}})}});syncTripChecks()}}
+function updateGroups(){{const groups=uniq(DATA.filter(x=>x.vehicle_id===vehicle.value).map(x=>x.route_group_id));options(group,groups);renderTripOptions();render()}}
+function render(){{const allRows=currentGroupRows();const rows=allRows.filter(x=>selectedTrips.has(x.trip_id)).sort((a,b)=>a.fuel_deviation_pct-b.fuel_deviation_pct);if(!allRows.length){{cards.innerHTML='';tbody.innerHTML='<tr><td colspan="15" style="text-align:center;padding:24px">目前沒有可顯示的路徑群組。</td></tr>';quality.className='quality';quality.textContent='';return}}const r=allRows[0];quality.className=`quality ${{r.group_quality}}`;quality.textContent=r.group_quality==='complete_pair'?'完整配對群組':'鏈式連接群組';
  const median=k=>{{const a=rows.map(x=>x[k]).filter(x=>x!=null).sort((a,b)=>a-b);const n=a.length;return n?n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])/2:null}};
- cards.innerHTML=[['群組趟數',rows.length,''],['中位時間',fmt(median('duration_min')),' min'],['中位油耗',fmt(median('fuel_l'),2),' L'],['中位怠速',fmt(median('idle_minutes')),' min'],['中位 Stop-go',fmt(median('stop_go_count'),0),' 次']].map(x=>`<div class="card"><div class="label">${{x[0]}}</div><div class="value">${{x[1]}}<small>${{x[2]}}</small></div></div>`).join('');
+ cards.innerHTML=[['顯示趟數',rows.length,''],['中位時間',fmt(median('duration_min')),' min'],['中位油耗',fmt(median('fuel_l'),2),' L'],['中位怠速',fmt(median('idle_minutes')),' min'],['中位 Stop-go',fmt(median('stop_go_count'),0),' 次']].map(x=>`<div class="card"><div class="label">${{x[0]}}</div><div class="value">${{x[1]}}<small>${{x[2]}}</small></div></div>`).join('');
+ if(!rows.length){{tbody.innerHTML='<tr><td colspan="15" style="text-align:center;padding:24px">尚未選取行程。</td></tr>';return}}
  const max=k=>Math.max(1,...rows.map(x=>Number(x[k])||0));const idleMax=max('idle_minutes'),rpmMax=max('high_rpm_minutes');
- tbody.innerHTML=rows.map(x=>`<tr><td>${{x.trip_id}}</td><td>${{fmt(x.duration_min)}}</td><td>${{fmt(x.fuel_l,2)}}</td><td>${{fmt(x.l_per_100km,2)}}</td><td>${{deviation(x.fuel_deviation_pct)}}</td><td>${{deviation(x.time_deviation_pct)}}</td><td>${{fmt(x.idle_minutes)}}<span class="bar" style="width:${{50*x.idle_minutes/idleMax}}px"></span></td><td>${{pct(x.idle_ratio)}}</td><td>${{fmt(x.high_rpm_minutes)}}<span class="bar" style="width:${{50*x.high_rpm_minutes/rpmMax}}px"></span></td><td>${{pct(x.high_rpm_ratio)}}</td><td>${{fmt(x.high_rpm_low_speed_minutes)}}</td><td>${{x.rapid_accel_count}}</td><td>${{x.rapid_decel_count}}</td><td>${{x.stop_go_count}}</td><td>${{fmt(x.speed_std)}}</td></tr>`).join('');}}
-options(vehicle,uniq(DATA.map(x=>x.vehicle_id)));vehicle.addEventListener('change',updateGroups);group.addEventListener('change',render);updateGroups();
+ tbody.innerHTML=rows.map(x=>`<tr><td>${{(x.start_time||'').replace('T',' ')}}</td><td>${{fmt(x.duration_min)}}</td><td>${{fmt(x.fuel_l,2)}}</td><td>${{fmt(x.l_per_100km,2)}}</td><td>${{deviation(x.fuel_deviation_pct)}}</td><td>${{deviation(x.time_deviation_pct)}}</td><td>${{fmt(x.idle_minutes)}}<span class="bar" style="width:${{50*x.idle_minutes/idleMax}}px"></span></td><td>${{pct(x.idle_ratio)}}</td><td>${{fmt(x.high_rpm_minutes)}}<span class="bar" style="width:${{50*x.high_rpm_minutes/rpmMax}}px"></span></td><td>${{pct(x.high_rpm_ratio)}}</td><td>${{fmt(x.high_rpm_low_speed_minutes)}}</td><td>${{x.rapid_accel_count}}</td><td>${{x.rapid_decel_count}}</td><td>${{x.stop_go_count}}</td><td>${{fmt(x.speed_std)}}</td></tr>`).join('');}}
+options(vehicle,uniq(DATA.map(x=>x.vehicle_id)));vehicle.addEventListener('change',updateGroups);group.addEventListener('change',()=>{{renderTripOptions();render()}});updateGroups();
 </script>
 </body></html>"""
 
@@ -571,6 +579,7 @@ def main() -> None:
             "trip_id": member["journey"],
             "route_group_id": member["route_group"],
             "vehicle_id": member["vehicle"],
+            "start_time": member.get("start"),
             **metrics,
             "group_trip_count": group["trip_count"],
             "direct_pair_density": group["direct_pair_density"],

@@ -37,6 +37,10 @@ python backend/scripts/data_pipeline/build_route_stop_map.py `
   --output "data\processed\analysis\route_stop_map.html"
 ```
 
+地圖產生後請從專案根目錄執行 `python -m http.server 8000`，再開啟
+`http://localhost:8000/data/processed/analysis/route_stop_map.html`。不要直接以
+`file://` 開啟，否則 OpenStreetMap tile 請求可能缺少有效的網頁來源資訊。
+
 ## `route_poc`
 
 - `extract_trip.py`: streams the local XLSX and extracts one vehicle journey for the route POC.

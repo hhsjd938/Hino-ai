@@ -212,31 +212,35 @@ TEMPLATE = r'''<!doctype html>
     header{height:68px;padding:12px 18px;background:#fff;border-bottom:1px solid #d8dee4;display:flex;gap:18px;align-items:center;position:relative;z-index:1000}
     h1{font-size:18px;margin:0;white-space:nowrap} .controls{display:flex;gap:10px;flex:1;align-items:end}
     label{font-size:12px;color:#52606d;display:grid;gap:3px} select{min-width:220px;padding:7px 9px;border:1px solid #b8c2cc;border-radius:6px;background:white}
+    details.trip-picker{position:relative;min-width:320px;color:#17202a} details.trip-picker summary{list-style:none;cursor:pointer;min-width:320px;padding:7px 30px 7px 9px;border:1px solid #b8c2cc;border-radius:6px;background:white;position:relative} details.trip-picker summary::-webkit-details-marker{display:none} details.trip-picker summary::after{content:'▼';position:absolute;right:9px;color:#52606d;font-size:10px} details.trip-picker[open] summary::after{content:'▲'} .trip-options{position:absolute;z-index:1200;top:100%;left:0;right:0;max-height:360px;overflow:auto;margin-top:3px;padding:6px;background:#fff;border:1px solid #b8c2cc;border-radius:6px;box-shadow:0 5px 16px #0002}.trip-options label{display:flex;grid-template-columns:none;gap:7px;align-items:flex-start;padding:6px 5px;font-size:12px;color:#17202a;cursor:pointer}.trip-options label:hover{background:#f0f4f7}.trip-options input{margin-top:2px;flex:0 0 auto}
     #map{height:calc(100vh - 68px)} #info{position:absolute;z-index:900;top:84px;right:16px;width:300px;background:rgba(255,255,255,.96);padding:14px;border-radius:9px;box-shadow:0 3px 16px #0002;line-height:1.5}
     #info b{font-size:15px} #info .muted{font-size:12px;color:#5c6773;margin-top:7px}.legend{display:flex;gap:12px;margin-top:9px;font-size:12px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}.start{background:#16803c}.stop{background:#d97706}.end{background:#c92a2a}
     @media(max-width:760px){header{height:auto;align-items:flex-start;flex-direction:column}.controls{width:100%;flex-direction:column;align-items:stretch}select{width:100%;min-width:0}#map{height:calc(100vh - 166px)}#info{top:180px;right:10px;width:260px}}
   </style>
 </head>
 <body>
-<header><h1>HINO 重複路線與疑似停靠點</h1><div class="controls"><label>路線群組<select id="group"></select></label><label>行程<select id="trip"></select></label></div></header>
+<header><h1>HINO 重複路線與疑似停靠點</h1><div class="controls"><label>路線群組<select id="group"></select></label><label>行程<details id="tripPicker" class="trip-picker"><summary id="tripSummary">行程</summary><div id="tripOptions" class="trip-options"></div></details></label></div></header>
 <div id="map"></div><aside id="info"></aside>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const trips=__TRIP_DATA__;
-const groupSel=document.getElementById('group'),tripSel=document.getElementById('trip'),info=document.getElementById('info');
+const groupSel=document.getElementById('group'),tripPicker=document.getElementById('tripPicker'),tripSummary=document.getElementById('tripSummary'),tripOptions=document.getElementById('tripOptions'),info=document.getElementById('info');
+const selectedJourneys=new Set();
 const map=L.map('map',{preferCanvas:true});
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 const layer=L.layerGroup().addTo(map); const palette=['#1769aa','#8e44ad','#00897b','#e65100','#5d4037','#c2185b'];
 const groups=[...new Set(trips.map(t=>t.group))]; groups.forEach(g=>groupSel.add(new Option(`${g}（${trips.filter(t=>t.group===g).length} 趟）`,g)));
-function loadTrips(){tripSel.innerHTML='';tripSel.add(new Option('顯示群組內全部行程','*'));trips.filter(t=>t.group===groupSel.value).forEach(t=>tripSel.add(new Option(`${t.start.replace('T',' ')}｜${t.km} km｜${t.efficiency} L/100km`,t.journey)));draw()}
+function currentTrips(){return trips.filter(t=>t.group===groupSel.value)}
+function syncTripChecks(){const current=currentTrips();const all=tripOptions.querySelector('input[data-all]');if(all)all.checked=current.length>0&&selectedJourneys.size===current.length;tripOptions.querySelectorAll('input[data-journey]').forEach(input=>{input.checked=selectedJourneys.has(input.value)});tripSummary.textContent=`行程（${selectedJourneys.size}/${current.length} 已選）`}
+function renderTripOptions(){const current=currentTrips();selectedJourneys.clear();current.forEach(t=>selectedJourneys.add(t.journey));tripOptions.innerHTML='';const allLabel=document.createElement('label');const allInput=document.createElement('input');allInput.type='checkbox';allInput.dataset.all='true';allLabel.append(allInput,document.createTextNode('全部行程'));tripOptions.append(allLabel);allInput.addEventListener('change',()=>{if(allInput.checked)current.forEach(t=>selectedJourneys.add(t.journey));else selectedJourneys.clear();syncTripChecks();draw()});current.forEach(t=>{const label=document.createElement('label');const input=document.createElement('input');input.type='checkbox';input.value=t.journey;input.dataset.journey='true';label.append(input,document.createTextNode(`${t.start.replace('T',' ')}｜${t.km} km｜${t.efficiency} L/100km`));tripOptions.append(label);input.addEventListener('change',()=>{if(input.checked)selectedJourneys.add(input.value);else selectedJourneys.delete(input.value);syncTripChecks();draw()})});syncTripChecks()}
 function marker(point,color,label,popup){return L.circleMarker(point,{radius:7,color:'#fff',weight:2,fillColor:color,fillOpacity:1}).bindTooltip(label).bindPopup(popup)}
-function draw(){layer.clearLayers();const shown=trips.filter(t=>t.group===groupSel.value&&(tripSel.value==='*'||t.journey===tripSel.value));const bounds=[];let stopCount=0;
- shown.forEach((t,i)=>{const color=palette[i%palette.length];L.polyline(t.points,{color,weight:tripSel.value==='*'?3:5,opacity:tripSel.value==='*'?.55:.9}).addTo(layer).bindPopup(`${t.start.replace('T',' ')}<br>${t.km} km｜${t.fuel} L｜${t.efficiency} L/100km`);t.points.forEach(p=>bounds.push(p));
-  if(tripSel.value!=='*'){marker(t.points[0],'#16803c','起點',`起點<br>${t.start.replace('T',' ')}`).addTo(layer);marker(t.points[t.points.length-1],'#c92a2a','終點','終點').addTo(layer)}
+function draw(){layer.clearLayers();const shown=currentTrips().filter(t=>selectedJourneys.has(t.journey));const bounds=[];let stopCount=0;
+ shown.forEach((t,i)=>{const color=palette[i%palette.length];L.polyline(t.points,{color,weight:shown.length===1?5:3,opacity:shown.length===1?.9:.7}).addTo(layer).bindPopup(`${t.start.replace('T',' ')}<br>${t.km} km｜${t.fuel} L｜${t.efficiency} L/100km`);t.points.forEach(p=>bounds.push(p));
+  marker(t.points[0],'#16803c','起點',`起點<br>${t.start.replace('T',' ')}<br>${t.km} km｜${t.fuel} L｜${t.efficiency} L/100km`).addTo(layer);marker(t.points[t.points.length-1],'#c92a2a','終點',`終點<br>${t.start.replace('T',' ')}`).addTo(layer)
   t.stops.forEach((s,n)=>{stopCount++;marker([s.lat,s.lon],'#d97706',`疑似停靠 ${s.minutes} 分鐘`,`疑似停靠點 ${n+1}<br>${s.start}<br>至 ${s.end}<br><b>${s.minutes} 分鐘</b>`).addTo(layer)})});
  if(bounds.length)map.fitBounds(bounds,{padding:[30,30],maxZoom:15});const one=shown.length===1?shown[0]:null;
  info.innerHTML=`<b>${groupSel.value}</b><br>${one?`${one.start.replace('T',' ')}<br>${one.km} km｜${one.fuel} L｜${one.efficiency} L/100km`:`顯示 ${shown.length} 趟歷史行程`}<br>疑似中途停靠：${stopCount}<div class="legend"><span><i class="dot start"></i>起點</span><span><i class="dot stop"></i>中途停靠</span><span><i class="dot end"></i>終點</span></div><div class="muted">疑似中途停靠：CAN 車速 ≤ __STOP_SPEED__ km/h，連續至少 __STOP_MINUTES__ 分鐘，並排除起點與終點周圍 __ENDPOINT_RADIUS__ 公尺。它可能是裝卸貨、休息、號誌或壅塞，無法直接確認為客戶。</div>`}
-groupSel.addEventListener('change',loadTrips);tripSel.addEventListener('change',draw);groupSel.value=groups[0];loadTrips();
+groupSel.addEventListener('change',()=>{renderTripOptions();draw()});groupSel.value=groups[0];renderTripOptions();draw();
 </script></body></html>'''
 
 
