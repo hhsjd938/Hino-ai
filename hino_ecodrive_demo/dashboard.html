@@ -1,0 +1,19 @@
+<div class="ecodrive">
+  <section class="playback panel">
+    <div class="section-heading"><div><span class="eyebrow">REPLAY SIMULATOR</span><h2 id="scenario-title"></h2></div><span id="play-status" class="pill">等待開始</span></div>
+    <div class="controls"><button id="play" class="primary">開始 / 繼續</button><button id="pause" disabled>暫停</button><button id="restart">重設 / 重播</button><label>播放速度 <select id="playback-speed"><option value="1">1×</option><option value="10">10×</option><option value="30">30×</option><option value="60">60×</option></select></label><span id="data-time" class="mono"></span></div>
+    <progress id="progress" value="0" max="1"></progress><div class="progress-labels"><span id="elapsed"></span><span>資料筆數 <span id="position"></span></span></div>
+  </section>
+  <section class="metrics">
+    <article class="metric"><span>CAN 車速</span><div><strong id="speed">—</strong><small>km/h</small></div><p id="car-state"></p></article>
+    <article class="metric"><span>引擎轉速</span><div><strong id="rpm">—</strong><small>RPM</small></div><p>自訂高轉速提醒</p></article>
+    <article class="metric"><span>區間平均加速度</span><div><strong id="acceleration">—</strong><small>m/s²</small></div><p>依相鄰紀錄的真實時間差</p></article>
+    <article class="metric"><span>累計怠速估計</span><div><strong id="idle">0</strong><small>sec</small></div><p>觀測間隔缺口會中斷估計</p></article>
+  </section>
+  <p id="data-quality" class="quality"></p>
+  <section id="alert" class="alert"><div class="alert-icon">!</div><div><span id="alert-source" class="eyebrow">ECO COACH</span><h2 id="alert-title">目前無駕駛提醒</h2><p id="alert-message"></p></div></section>
+  <section class="speech panel"><div><span class="eyebrow">VOICE ASSISTANT</span><h2>中文語音提醒</h2><p id="speech-status" role="status">正在取得系統語音…</p></div><div class="voice-controls"><label class="check"><input id="speech-enabled" type="checkbox" checked> 啟用語音</label><select id="voice" aria-label="中文聲音"></select><button id="test-speech">測試語音</button></div></section>
+  <section class="panel log"><div class="section-heading"><div><span class="eyebrow">EVENT TIMELINE</span><h2>事件紀錄 <span id="event-count" class="pill">0</span></h2></div><button id="clear-log">清除畫面紀錄</button></div><div class="table-scroll"><table><thead><tr><th>收到時間</th><th>事件</th><th>來源</th><th>原事件時間</th><th>提醒內容</th></tr></thead><tbody id="event-rows"></tbody></table><p id="event-empty" class="empty">等待行程事件。清除畫面紀錄不會改變事件統計。</p></div></section>
+  <section id="summary" class="panel" hidden><span class="eyebrow">TRIP SUMMARY</span><h2>本次回放摘要</h2><div class="trip-totals"><span>行駛里程 <strong id="distance">—</strong></span><span>耗油量 <strong id="fuel">—</strong></span></div><div id="summary-counts" class="chips"></div><p id="coaching"></p><p id="reference" class="note"></p></section>
+  <footer><p id="rule-info"></p><p>車機回報沿用原始事件；規則參數只影響模擬判定及自訂高 RPM。此頁回放歷史／模擬資料，事件與耗油比較不能單獨證明因果關係。</p></footer>
+</div>

@@ -1,0 +1,108 @@
+/* Native controls share the app shell's cream palette and Streamlit theme. */
+.st-key-od_page {
+  font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+  color: var(--eco-text);
+  padding-bottom: 2rem;
+  max-width: 1440px;
+  margin: auto;
+}
+.st-key-od_page .od-hero {
+  background: linear-gradient(115deg, #eee5d6, #f8f3e9);
+  color: var(--eco-text);
+  border: 1px solid #ded2bf;
+  border-radius: 18px;
+  padding: 30px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.st-key-od_page .od-hero h1 {
+  color: var(--eco-text);
+  font-size: clamp(26px, 2.8vw, 36px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.3;
+  margin: 10px 0 12px;
+  padding: 0;
+}
+.st-key-od_page .od-hero h1 span { color: #8a7c68; font-weight: 400; }
+.st-key-od_page .od-hero p { color: var(--eco-muted); margin: 0; font-size: 13px; line-height: 1.7; }
+.st-key-od_page .od-eyebrow { font-size: 10px; letter-spacing: 1.8px; font-weight: 700; color: var(--eco-accent); }
+.st-key-od_page .od-identity { display: grid; gap: 9px; text-align: right; min-width: 0; }
+.st-key-od_page .od-identity strong { font: 12px Consolas, monospace; color: #665742; }
+.st-key-od_page .od-identity small { color: var(--eco-muted); font-size: 11px; }
+.st-key-od_page .od-badge {
+  background: #fffdf8b3;
+  border: 1px solid #d8c9b2;
+  border-radius: 30px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: #76573c;
+  width: fit-content;
+  justify-self: end;
+}
+.st-key-od_page .od-note {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #e0d7c5;
+  background: #f2ecdf;
+  border-radius: 14px;
+  padding: 20px 24px;
+}
+.st-key-od_page .od-note-icon {
+  border-radius: 50%;
+  background: #e8ddc8;
+  color: #8b6b3e;
+  font-size: 20px;
+  font-weight: 700;
+  width: 42px;
+  height: 42px;
+  line-height: 42px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.st-key-od_page .od-note h2 { font-size: 18px; margin: 3px 0 6px; padding: 0; color: #645139; }
+.st-key-od_page .od-note p { font-size: 13px; line-height: 1.7; color: #796b55; margin: 0; }
+.st-key-od_page h2, .st-key-od_page h3 { color: var(--eco-text); font-weight: 650; font-size: 18px; }
+.st-key-od_page [data-testid="stForm"],
+.st-key-od_page .st-key-od_seed_panel,
+.st-key-od_page .st-key-od_results_panel,
+.st-key-od_page .st-key-od_map_panel {
+  background: var(--eco-surface);
+  border: 1px solid var(--eco-border);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 3px 14px #493b2305;
+}
+.st-key-od_page [data-testid="stMetric"] {
+  background: var(--eco-surface);
+  border: 1px solid var(--eco-border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.st-key-od_page [data-testid="stMetricLabel"] { color: var(--eco-muted); font-size: 12px; font-weight: 600; }
+.st-key-od_page [data-testid="stMetricValue"] { color: #5c4835; font-weight: 650; font-size: 36px; font-variant-numeric: tabular-nums; }
+.st-key-od_page [data-testid="stDataFrame"],
+.st-key-od_page [data-testid="stDeckGlJsonChart"] {
+  border: 1px solid var(--eco-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--eco-surface);
+}
+@media (max-width: 1000px) {
+  .st-key-od_page .od-hero { flex-direction: column; align-items: stretch; padding: 24px; }
+  .st-key-od_page .od-identity { text-align: left; }
+  .st-key-od_page .od-badge { justify-self: start; }
+}
+@media (max-width: 640px) {
+  .st-key-od_page [data-testid="stForm"],
+  .st-key-od_page .st-key-od_seed_panel,
+  .st-key-od_page .st-key-od_results_panel,
+  .st-key-od_page .st-key-od_map_panel { padding: 1rem; }
+  .st-key-od_page .od-hero { padding: 22px 20px; }
+  .st-key-od_page .od-hero h1 span { display: block; font-size: 23px; margin-top: 4px; }
+  .st-key-od_page .od-note { padding: 18px 16px; align-items: flex-start; }
+  .st-key-od_page [data-testid="stMetric"] { padding: .85rem; }
+}

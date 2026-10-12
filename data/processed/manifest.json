@@ -1,19 +1,20 @@
 {
   "dataset": "HINO processed collaboration package",
-  "generated_date": "2026-09-09",
+  "generated_date": "2026-10-12",
   "source": {
     "name": "output data_Hotai_20260511.xlsx",
-    "size_bytes": 115582132,
-    "sha256": "A58E9F0A372D8F0372B3B2E8D634AB411E0F28C527251679A0770B1271D6794B"
+    "size_bytes": 115960272,
+    "sha256": "DF8039CCE5C20AA75826EBF59AE6A4ECB9CD020813DCFB7AD57DAA00E0C7C11A"
   },
   "records": 493744,
   "vehicles": 20,
   "trips": 3541,
-  "screened_trips": 851,
-  "similar_endpoint_pairs": 1621,
-  "route_pairs_at_90_percent_coverage": 1189,
-  "repeated_route_groups": 32,
-  "trips_in_repeated_route_groups": 157,
+  "screened_trips": 2301,
+  "similar_endpoint_pairs": 7461,
+  "route_pairs_at_90_percent_coverage": 5368,
+  "repeated_route_groups": 243,
+  "trips_in_repeated_route_groups": 999,
   "source_workbook_included": false,
-  "rebuildable_cache_included": false
+  "rebuildable_cache_included": false,
+  "route_trip_eligibility": "whole-trip distance > 0 km AND whole-trip fuel > 0 L; other quality and route matching checks retained"
 }

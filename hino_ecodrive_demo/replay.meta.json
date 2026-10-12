@@ -1,0 +1,19 @@
+{
+  "mode": "real",
+  "source": "output data_Hotai_20260511.xlsx",
+  "source_sha256": "df8039cce5c20aa75826ebf59ae6a4ecb9cd020813dcfb7ad57daa00e0c7c11a",
+  "replay_sha256": "38dd7d27587e861418bad4b0757d75a52c8dc030f9081de7a6cea357562c277f",
+  "vehicle": "C1N6TWBTVB",
+  "journey": "250731030003",
+  "records": 413,
+  "start": "2025-07-31 11:31:30",
+  "end": "2025-07-31 13:41:19",
+  "source_records_scanned": 493744,
+  "reference": {
+    "route_group": "C1N6TWBTVB-R004",
+    "trip_count": 2,
+    "median_fuel_l": 8.0,
+    "median_l_per_100km": 29.907482460798832,
+    "definition": "同車同路線完整群組（包含本趟）的中位數，非因果省油估計"
+  }
+}

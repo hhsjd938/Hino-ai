@@ -1,0 +1,16 @@
+[theme]
+base = "light"
+primaryColor = "#8B6448"
+backgroundColor = "#F6F3EC"
+secondaryBackgroundColor = "#EEE9DF"
+textColor = "#38352F"
+font = "sans serif"
+borderColor = "#DED7CA"
+dataframeBorderColor = "#DED7CA"
+dataframeHeaderBackgroundColor = "#EEE9DF"
+showWidgetBorder = true
+baseRadius = "0.65rem"
+
+[theme.sidebar]
+backgroundColor = "#EEE9DF"
+secondaryBackgroundColor = "#FAF8F3"

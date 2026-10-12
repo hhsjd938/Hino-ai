@@ -156,7 +156,7 @@ def main() -> None:
 
     complete_groups = int(summary_frame["direct_pair_density"].eq(1).sum()) if len(summary_frame) else 0
     report = {
-        "definition": "Same vehicle; pair passed endpoint, distance, and fuel screening; bidirectional route coverage minimum meets the threshold.",
+        "definition": "Both trips have whole-trip distance > 0 km and fuel > 0 L; same vehicle; pair passed endpoint and distance-ratio screening; bidirectional route coverage minimum meets the threshold.",
         "coverage_threshold": args.threshold,
         "validated_direct_pairs": int(len(edges)),
         "repeated_route_groups": int(len(summary_frame)),

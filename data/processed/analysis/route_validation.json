@@ -1,23 +1,23 @@
 {
-  "method": "Same-vehicle endpoint/mileage/fuel screening followed by bidirectional geographic overlap. GPS points reduced to occupied 250m approximate planar grid cells; fraction of occupied cells within 500m of the other trip. Retrieval heuristic, not road-level route identity or proof of comparable load/traffic.",
+  "method": "Both trips have whole-trip distance > 0 km and fuel > 0 L; same-vehicle endpoint and mileage-ratio screening followed by bidirectional geographic overlap. GPS points reduced to occupied 250m approximate planar grid cells; fraction of occupied cells within 500m of the other trip. Retrieval heuristic, not road-level route identity or proof of comparable load/traffic.",
   "coverage_threshold_results": {
     "0.8": {
-      "pairs": 1221,
-      "vehicles": 11,
-      "distinct_trips": 165,
-      "later_trips_with_prior": 130
+      "pairs": 6431,
+      "vehicles": 20,
+      "distinct_trips": 1058,
+      "later_trips_with_prior": 788
     },
     "0.9": {
-      "pairs": 1189,
-      "vehicles": 11,
-      "distinct_trips": 157,
-      "later_trips_with_prior": 124
+      "pairs": 5368,
+      "vehicles": 20,
+      "distinct_trips": 999,
+      "later_trips_with_prior": 743
     },
     "0.95": {
-      "pairs": 1093,
-      "vehicles": 9,
-      "distinct_trips": 137,
-      "later_trips_with_prior": 110
+      "pairs": 4588,
+      "vehicles": 20,
+      "distinct_trips": 916,
+      "later_trips_with_prior": 686
     }
   },
   "main_threshold": 0.9

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>HINO 共同起終點與疑似停靠點</title>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+ <style>__BASE_CSS__
+ __CSS__</style>
+</head>
+<body class="search-open">
+ <header><h1>HINO 共同起終點與疑似停靠點</h1><div class="controls">
+  <label>符合行程<details id="tripPicker" class="trip-picker"><summary id="tripSummary">請先搜尋</summary><div id="tripOptions" class="trip-options"></div></details></label>
+  <button id="toggleSearch" type="button" aria-expanded="true" aria-controls="searchPanel">收合搜尋</button>
+  <button id="showAll" type="button">顯示全部符合行程</button>
+ </div></header>
+ <main id="map" aria-label="OpenStreetMap 歷史行程地圖"></main>
+ <section id="searchPanel" aria-label="共同起終點搜尋">
+  <div class="panel-heading"><h2>輸入起點與終點</h2><span class="tag">同方向比對</span></div>
+  <p class="muted">兩端都在容許距離內才列入。不限制同一車輛或同一路線群組。</p>
+  <label>從既有行程帶入<select id="seedTrip"></select></label>
+  <div class="actions"><button id="fillSeed" type="button">帶入所選行程</button><button id="swapEndpoints" type="button">交換起終點</button></div>
+  <form id="searchForm">
+   <div class="coordinate-grid">
+    <label>起點緯度<input id="originLat" type="number" step="any" min="-90" max="90" required></label>
+    <label>起點經度<input id="originLon" type="number" step="any" min="-180" max="180" required></label>
+    <label>終點緯度<input id="destinationLat" type="number" step="any" min="-90" max="90" required></label>
+    <label>終點經度<input id="destinationLon" type="number" step="any" min="-180" max="180" required></label>
+   </div>
+   <label>起點、終點各自的容許距離（公尺）<input id="radius" type="number" step="any" min="1" max="100000" value="1000" required></label>
+   <label class="check"><input id="screenedOnly" type="checkbox">只查通過品質篩選（里程 &gt;0、耗油 &gt;0）</label>
+   <div class="actions"><button class="primary" type="submit">搜尋共同起終點</button><button id="clearSearch" type="button">清除結果</button></div>
+  </form>
+  <p id="catalogStatus" class="muted"></p>
+  <p id="searchStatus" role="status" aria-live="polite">已預填一趟行程，按搜尋即可查看。</p>
+ </section>
+ <aside id="info" aria-label="搜尋結果">
+  <b>搜尋結果</b><p id="resultCounts">等待搜尋。</p><p id="queryDetails" class="muted"></p>
+  <div class="legend"><span><i class="dot start"></i>起點</span><span><i class="dot stop"></i>中途停靠</span><span><i class="dot end"></i>終點</span></div>
+  <p id="drawStatus" class="muted"></p>
+  <div id="groupResults"></div>
+  <details id="resultDetails"><summary>符合行程明細</summary><div id="tripResults" class="table-scroll"></div></details>
+  <button id="download" type="button" disabled>下載符合行程 CSV</button>
+  <p class="muted">共同起終點不代表中間走相同道路。路線群組沿用既有同車 GPS 分群；「未分群」不代表不同道路。點群組可只看該群組的符合行程。</p>
+  <p class="muted">疑似中途停靠：CAN 車速 ≤3 km/h，連續至少 3 分鐘，排除起終點周圍 300 公尺。GPS 間隔超過 120 秒處不連線，停靠點可能是休息、號誌、壅塞或裝卸，無法確認為客戶。</p>
+ </aside>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ <script>const dataset=__DATA__;
+ __JS__</script>
+</body>
+</html>

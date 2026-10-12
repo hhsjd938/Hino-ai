@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-28T15:55:21+08:00",
+  "generated_at": "2026-10-12T01:14:49+08:00",
   "source": {
     "name": "output data_Hotai_20260511.xlsx",
-    "size_bytes": 115582132,
-    "sha256": "a58e9f0a372d8f0372b3b2e8d634ab411e0f28c527251679a0770b1271d6794b"
+    "size_bytes": 115960272,
+    "sha256": "df8039cce5c20aa75826ebf59ae6a4ecb9cd020813dcfb7ad57daa00e0c7c11a"
   },
   "route_members_source": "route_group_members.csv",
   "route_groups_source": "route_groups.csv",
@@ -23,14 +23,14 @@
   },
   "counts": {
     "source_rows_scanned": 493744,
-    "selected_rows": 48002,
+    "selected_rows": 118028,
     "selected_rows_invalid_time": 0,
     "rapid_event_reports_missing_start": 0,
-    "vehicles": 11,
-    "route_groups": 32,
-    "trips": 157,
-    "complete_pair_groups": 28,
-    "chain_connected_groups": 4
+    "vehicles": 20,
+    "route_groups": 243,
+    "trips": 999,
+    "complete_pair_groups": 215,
+    "chain_connected_groups": 28
   },
   "reconciliation": {
     "distance_mismatch_count": 0,
@@ -38,7 +38,7 @@
     "l_per_100km_mismatch_count": 0,
     "max_distance_abs_delta": 1.4210854715202004e-14,
     "max_fuel_abs_delta": 0.0,
-    "max_l_per_100km_abs_delta": 7.105427357601002e-15
+    "max_l_per_100km_abs_delta": 5.684341886080802e-14
   },
   "excluded_intervals": {
     "nonpositive_seconds": 0,

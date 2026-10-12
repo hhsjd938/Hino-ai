@@ -1,8 +1,8 @@
 {
   "source": {
     "name": "output data_Hotai_20260511.xlsx",
-    "size": 115582132,
-    "mtime_ns": 1778633397566036900
+    "size": 115960272,
+    "mtime_ns": 1791728291259263600
   },
   "rows": 493744,
   "vehicles": 20,
@@ -10,96 +10,97 @@
   "observation_dates": 31,
   "trip_start_dates": 30,
   "candidate": {
-    "trips": 914,
+    "trips": 2409,
     "vehicles": 20,
     "by_type": {
-      "300": 482,
-      "500": 238,
-      "700": 194
+      "300": 1556,
+      "500": 616,
+      "700": 237
     },
     "l_per_100km": {
-      "0": 8.0,
-      "0.25": 13.888888888888989,
-      "0.5": 17.857142857142858,
-      "0.75": 25.491068062728324,
-      "0.95": 50.0,
-      "1": 185.5263157894737
+      "0": 6.09756097561192,
+      "0.25": 15.151515151518492,
+      "0.5": 20.27027027027027,
+      "0.75": 30.303030303036984,
+      "0.95": 66.45161290322575,
+      "1": 1000.0
     }
   },
   "screened": {
-    "trips": 851,
+    "trips": 2301,
     "vehicles": 20,
     "by_type": {
-      "300": 469,
-      "500": 220,
-      "700": 162
+      "300": 1520,
+      "500": 584,
+      "700": 197
     },
     "l_per_100km": {
-      "0": 8.0,
-      "0.25": 13.843948188488836,
-      "0.5": 17.42627345844538,
-      "0.75": 24.193548387096776,
-      "0.95": 45.83333333333333,
-      "1": 111.11111111111111
+      "0": 6.09756097561192,
+      "0.25": 15.151515151518492,
+      "0.5": 20.0,
+      "0.75": 30.0,
+      "0.95": 62.50000000005684,
+      "1": 500.00000000727596
     }
   },
   "screen_rules": [
-    "distance >= 10 km",
+    "whole-trip distance delta > 0 km",
     "fuel delta > 0; fuel and mileage never decrease within trip",
     "all CAN status == 0",
     "no duplicate timestamps; no gap above 120 seconds",
     "engineOn within 120 seconds of first record; parked within 120 seconds of last record"
   ],
+  "fuel_threshold_statistics_only_not_filters": true,
   "screened_fuel_thresholds": {
     "1": {
-      "trips": 851,
+      "trips": 1538,
       "vehicles": 20,
       "by_type": {
-        "300": 469,
-        "500": 220,
-        "700": 162
+        "300": 848,
+        "500": 500,
+        "700": 190
       },
       "l_per_100km": {
         "0": 8.0,
-        "0.25": 13.843948188488836,
-        "0.5": 17.42627345844538,
-        "0.75": 24.193548387096776,
-        "0.95": 45.83333333333333,
-        "1": 111.11111111111111
+        "0.25": 15.384615384615385,
+        "0.5": 20.0,
+        "0.75": 28.40909090909179,
+        "0.95": 50.0,
+        "1": 400.0
       }
     },
     "2": {
-      "trips": 788,
+      "trips": 916,
       "vehicles": 20,
       "by_type": {
-        "300": 406,
-        "500": 220,
-        "700": 162
+        "300": 453,
+        "500": 278,
+        "700": 185
       },
       "l_per_100km": {
         "0": 9.17431192660581,
-        "0.25": 14.11434709954654,
-        "0.5": 18.181818181818183,
-        "0.75": 25.0,
-        "0.95": 47.3172514619883,
-        "1": 111.11111111111111
+        "0.25": 14.72996403801796,
+        "0.5": 19.82629529799341,
+        "0.75": 29.19748520710059,
+        "0.95": 50.0,
+        "1": 400.0
       }
     },
     "5": {
-      "trips": 461,
+      "trips": 464,
       "vehicles": 17,
       "by_type": {
-        "300": 125,
+        "300": 126,
         "500": 183,
-        "700": 153
+        "700": 155
       },
       "l_per_100km": {
         "0": 10.2803738317757,
-        "0.25": 17.42627345844538,
-        "0.5": 21.666666666666668,
-        "0.75": 30.21978021978022,
-        "0.95": 55.26315789473685,
-        "1": 111.11111111111111
+        "0.25": 17.45180645984944,
+        "0.5": 21.730769230769234,
+        "0.75": 30.28538490495012,
+        "0.95": 56.05263157894735,
+        "1": 350.0
       }
     },
     "10": {
@@ -143,13 +144,13 @@
     ]
   ],
   "positive_fuel_steps": 26600,
-  "screened_mileage_speed_agreement_20pct_or_2km": 819,
-  "similar_endpoint_pairs": 1621,
+  "screened_mileage_speed_agreement_20pct_or_2km": 2261,
+  "similar_endpoint_pairs": 7461,
   "pairs_both_fuel_ge5l": 1323,
   "pairs_ge5l_vehicles": 13,
   "pairs_ge5l_distinct_trips": 221,
   "pairs_ge5l_later_trips_with_prior": 165,
-  "pair_definition": "same vehicle; earlier trip ends before later trip; later/earlier mileage in [0.8,1.2]; origins and destinations each within 1 km. Does NOT establish same route, load, traffic or causal comparison.",
+  "pair_definition": "both trips have whole-trip distance > 0 km and fuel > 0 L; same vehicle; earlier trip ends before later trip; later/earlier mileage in [0.8,1.2]; origins and destinations each within 1 km. Does NOT establish same route, load, traffic or causal comparison.",
   "idle_events": 1620,
   "idle_duration_matches_within2s": 1603,
   "idle_start_location_candidates": 1595,
@@ -321,5 +322,5 @@
     ]
   },
   "events_missing_start": 0,
-  "runtime_s": 123.94179248809814
+  "runtime_s": 11.45612621307373
 }
